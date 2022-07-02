@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 from email.message import EmailMessage
 import smtplib
-import os
+import os, sys
 import os.path
 import mimetypes
 import getpass
 
 
 def generate_email (sender, recipient, subject, body, attachement_path=None):
-    """This function creates an email and sends it to a recipient or contact list with attachement if needed."""
+    """This function creates an email and returns a variable called <message> containing a recipient or recipients list with attachement if needed."""
     
     if isinstance(recipient, list):
         contacts = ", ".join(recipient)
@@ -44,5 +44,29 @@ def send_email(message):
         sender = message["From"]
         mail_server.login(sender, mail_pass)
         mail_server.send_message(message)
+
+
+if __name__ == "__main__":
+    mail_template = sys.argv[1]
+    with open (mail_template, "r") as mt:
+            mail_sender = mt.readline().strip("\n").replace("Sender: ", "")
+            mail_recipient = mt.readline().strip("\n").replace("Recipient: ", "")
+            mail_subject = mt.readline().strip("\n").replace("Subject: ", "")
+            mail_body = mt.readline().strip("\n").replace("Body: ", "")
+            mail_attachement_path = mt.readline().strip("\n").replace("Attachements: ", "")
+
+    if mail_attachement_path == "":
+        mail_attachement_path = None
+
+
+    create_mail = generate_email(
+        sender = mail_sender,
+        recipient=mail_recipient,
+        subject=mail_subject,
+        body=mail_body,
+        attachement_path=mail_attachement_path
+    )
+    send_email(create_mail)
+
 
 
