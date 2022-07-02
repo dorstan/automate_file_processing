@@ -8,7 +8,7 @@ import getpass
 
 
 message = EmailMessage()
-attachement_path = "~/Kode/email_config/picture_mail"
+attachement_path = "/Users/dorinstanchescu/Kode/email_config/picture_mail"
 sender = "dorin.grigore.stanchescu@gmail.com"
 contacts = ["stanchescudorin@gmail.com", "stanchescuroxana@gmail.com"]
 subject = "Files automation"
