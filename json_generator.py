@@ -43,22 +43,26 @@ def json_to_csv(json_file):
 
 
 if __name__ == "__main__":
-    # Call argv for imput (filename[1] and uique_row[2] to be used as key)
+    # Call argv for input (filename[1] and uique_row[2] to be used as key)
     json_generator = sys.argv
     command_generator = json_generator[1]
+    file_name = json_generator[2]
+    
+    while not os.path.isfile(file_name):
+        print("This is not a valid path")
+        file_name = input("Type valid path: ")
+    
     if command_generator == "json":
-        file_name = input("Please type the file path ")
-        if not os.path.isfile(file_name):
-            print("Please provide a valid path")
-            file_name =input("Please type the file path ")
-        row_unique_key = input("Please type the uique row as key ")
-        
-        alpha = dict_from_csv(file_name, rowname=row_unique_key)
-        # Save the file with the same name and json extension
-        serialize_to_jsonfile(alpha, "{}.json".format(file_name.replace(".csv", "")))
+        row_unique_key = input("Please type an unique row from table as key ")
+        try:
+            alpha = dict_from_csv(file_name, rowname=row_unique_key)
+            # Save the file with the same name and json extension
+            serialize_to_jsonfile(alpha, "{}.json".format(file_name.replace(".csv", "")))
+        except Exception as e:
+            print("This error occured: ", getattr(e, "message", str(e)))
+    
     elif command_generator == "csv":
-        file_name = input("Please type the file path ")
-        if not os.path.isfile(file_name):
-            print("Please provide a valid path")
-            file_name =input("Please type the file path ")
-        json_to_csv(file_name)
+        try:
+            json_to_csv(file_name)
+        except Exception as e:
+            print("This error occured: ", getattr(e, "message", str(e)))
